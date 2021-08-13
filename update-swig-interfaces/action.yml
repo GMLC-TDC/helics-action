@@ -1,0 +1,21 @@
+name: 'Update SWIG Interface Files'
+description: 'Runs swig to generate updated interface files for the HELICS language bindings'
+inputs:
+  matlab:
+    description: 'Generate Matlab interface files'
+    default: true
+  java:
+    description: 'Generate Java interface files'
+    default: true
+  python:
+    description: 'Generate Python interface files (SWITCHED TO pyhelics IN HELICS 2.7 - DOES NOTHING)'
+    default: false
+  csharp:
+    description: 'Generate C# interface files (NOT SUPPORTED - DOES NOTHING)'
+    default: false
+  octave:
+    description: 'Generate Octave interface files (NOT SUPPORTED - DOES NOTHING)'
+    default: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

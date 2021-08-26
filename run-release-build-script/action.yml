@@ -19,19 +19,19 @@ inputs:
 runs:
   using: "composite"
   steps:
-      - name: Build native
-        if: runner.os != 'Linux'
-        env:
-          BUILD_ARCH: ${{ inputs.build_arch }}
-          BUILD_GEN: ${{ inputs.cmake_gen }}
-          MSVC_VER: ${{ inputs.msvc_ver }}
-          MACOSX_DEPLOYMENT_TARGET: ${{ inputs.macos_target_ver }}
-          CPACK_GEN: ${{ inputs.cpack_gen }}
-        shell: bash
-        run: ${{ inputs.script }}
+    - name: Build native
+      if: runner.os != 'Linux'
+      env:
+        BUILD_ARCH: ${{ inputs.build_arch }}
+        BUILD_GEN: ${{ inputs.cmake_gen }}
+        MSVC_VER: ${{ inputs.msvc_ver }}
+        MACOSX_DEPLOYMENT_TARGET: ${{ inputs.macos_target_ver }}
+        CPACK_GEN: ${{ inputs.cpack_gen }}
+      shell: bash
+      run: ${{ inputs.script }}
  
-      - name: Build containerized
-        if: runner.os == 'Linux'
-        uses: ./.github/actions/linux-release-builder
-        with:
-          script: ${{ inputs.script }}
+    - name: Build containerized
+      if: runner.os == 'Linux'
+      uses: ./.github/actions/linux-release-builder
+      with:
+        script: ${{ inputs.script }}

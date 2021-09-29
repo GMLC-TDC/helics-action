@@ -7,6 +7,9 @@ inputs:
     default: 'v3'
   prefix:
     description: 'Install prefix for HELICS. Default is /usr/local on Linux/macOS, and C:/local/helics on Windows'
+  token:
+    description: 'Personal access token (PAT) used to access the GitHub API for fetching release info. The post job step logs out of gh cli after.'
+    default: ${{ github.token }}
 outputs:
   version:
     description: 'Version of HELICS that was installed'
@@ -19,8 +22,9 @@ runs:
     - id: gh-cli-auth
       shell: bash
       env:
-        GITHUB_TOKEN: ${{github.token}}
+        GITHUB_TOKEN: ${{inputs.token}}
       run: gh auth login
+
     - id: newest-matching-version
       shell: bash
       run: |
@@ -58,3 +62,7 @@ runs:
         echo "::set-output name=prefix::$(echo ${prefix})"
         popd
         rm -rf tmpdir
+
+    - id: gh-cli-logout
+      shell: bash
+      run: gh auth logout

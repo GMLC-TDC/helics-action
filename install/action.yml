@@ -62,6 +62,7 @@ runs:
         cd "${INSTALLER_DIRNAME}"
         tar -czf "$tmpdir/helics.tar.gz" *
         cd "${prefix}"
+        echo "PWD=$PWD"
         $sudo_cmd tar -xf "$tmpdir/helics.tar.gz" -C "${prefix}"
         # add to PATH on Windows
         echo

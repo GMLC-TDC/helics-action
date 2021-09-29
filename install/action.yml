@@ -64,4 +64,4 @@ runs:
 
     - id: gh-cli-logout
       shell: bash
-      run: gh auth logout
+      run: gh auth logout --hostname github.com

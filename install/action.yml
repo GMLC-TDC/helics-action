@@ -16,6 +16,8 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - id: gh-cli-auth
+      run: gh auth login
     - id: newest-matching-version
       shell: bash
       run: |

@@ -38,7 +38,7 @@ runs:
       shell: bash
       run: |
         tmpdir=$(mktemp -d)
-        pushd $tmpdir
+        pushd "$tmpdir"
         # Download HELICS release based on the platform
         case "$(uname -s)" in
           Linux*) platname="Linux-x86_64" && ext="tar.gz" && prefix="/usr/local";;
@@ -60,13 +60,13 @@ runs:
         # "Install" HELICS
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then mkdir -p "${prefix}"; fi
         cd "${INSTALLER_DIRNAME}"
-        7z a -t7z helics.7z *
-        7z x helics.7z -o"${prefix}" -r
+        tar -czf "$tmpdir/helics.tar.gz" .
+        tar -xf "$tmpdir/helics.tar.gz" -C "${prefix}"
         # add to PATH on Windows
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "${prefix}/bin" >> "${GITHUB_PATH}}"; fi
         echo "::set-output name=prefix::$(echo ${prefix})"
         popd
-        rm -rf $tmpdir
+        rm -rf "$tmpdir"
 
     - id: gh-cli-logout
       shell: bash

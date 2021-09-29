@@ -19,7 +19,7 @@ runs:
     - id: gh-cli-auth
       shell: bash
       env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        GITHUB_TOKEN: ${{github.token}}
       run: gh auth login
     - id: newest-matching-version
       shell: bash

@@ -48,7 +48,7 @@ runs:
         esac
         if [[ "${{inputs.prefix}}" != "" ]]; then prefix="${{inputs.prefix}}"; fi
         HELICS_VERSION="${{steps.newest-matching-version.outputs.version}}"
-        INSTALLER_DIRNAME="Helics-${HELICS_VERSION:1}-${platname}.${ext}"
+        INSTALLER_DIRNAME="Helics-${HELICS_VERSION:1}-${platname}"
         INSTALLER_ARCHIVE="${INSTALLER_DIRNAME}.${ext}"
         curl -O -L "https://github.com/GMLC-TDC/HELICS/releases/download/v${HELICS_VERSION:1}/${INSTALLER_ARCHIVE}"
         # Extract HELICS archive

@@ -38,7 +38,7 @@ runs:
       shell: bash
       run: |
         tmpdir=$(mktemp -d)
-        pushd tmpdir
+        pushd $tmpdir
         # Download HELICS release based on the platform
         case "$(uname -s)" in
           Linux*) platname="Linux-x86_64" && ext="tar.gz" && prefix="/usr/local";;
@@ -59,7 +59,7 @@ runs:
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "${prefix}/bin" >> "${GITHUB_PATH}}"; fi
         echo "::set-output name=prefix::$(echo ${prefix})"
         popd
-        rm -rf tmpdir
+        rm -rf $tmpdir
 
     - id: gh-cli-logout
       shell: bash

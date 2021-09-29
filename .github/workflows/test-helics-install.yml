@@ -11,4 +11,6 @@ jobs:
     steps:
       - uses: gmlc-tdc/helics-action/install@main
       - name: Test running helics_broker
-        run: helics_broker --version
+        run: |
+          echo "PATH=$PATH"
+          helics_broker --version

@@ -61,7 +61,7 @@ runs:
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then mkdir -p "${prefix}"; fi
         cd "${INSTALLER_DIRNAME}"
         tar -czf "$tmpdir/helics.tar.gz" .
-        tar -xf "$tmpdir/helics.tar.gz" -C "${prefix}"
+        sudo tar -xf "$tmpdir/helics.tar.gz" -C "${prefix}"
         # add to PATH on Windows
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "${prefix}/bin" >> "${GITHUB_PATH}}"; fi
         echo "::set-output name=prefix::$(echo ${prefix})"

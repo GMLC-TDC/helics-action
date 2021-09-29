@@ -21,9 +21,7 @@ runs:
   steps:
     - id: gh-cli-auth
       shell: bash
-      env:
-        GITHUB_TOKEN: ${{inputs.token}}
-      run: gh auth login
+      run: echo "$GITHUB_TOKEN" | gh auth login --with-token
 
     - id: newest-matching-version
       shell: bash

@@ -6,7 +6,7 @@ inputs:
     description: 'HELICS version to install. Default is `v3`. Use `nightly` to install the latest successful nightly HELICS build.'
     default: 'v3'
   prefix:
-    description: 'Install prefix for HELICS. Default is /usr/local on Linux/macOS, and C:/local/helics on Windows'
+    description: 'Install prefix for HELICS. Default is /usr/local on Linux/macOS, and $LOCALAPPDATA/helics on Windows'
   token:
     description: 'Personal access token (PAT) used to access the GitHub API for fetching release info. The post job step logs out of gh cli after.'
     default: ${{ github.token }}
@@ -43,7 +43,7 @@ runs:
         case "$(uname -s)" in
           Linux*) platname="Linux-x86_64" && ext="tar.gz" && prefix="/usr/local" && sudo_cmd=sudo;;
           Darwin*) platname="macOS-x86_64" && ext="zip" && prefix="/usr/local" && sudo_cmd=sudo;;
-          MINGW*) platname="win64" && ext="zip" && prefix="C:/local/helics" && sudo_cmd="";;
+          MINGW*) platname="win64" && ext="zip" && prefix="${LOCALAPPDATA}/gmlc-tdc/helics" && sudo_cmd="";;
           *) exit 1
         esac
         if [[ "${{inputs.prefix}}" != "" ]]; then prefix="${{inputs.prefix}}"; fi
@@ -63,6 +63,7 @@ runs:
         tar -czf "$tmpdir/helics.tar.gz" * 
         $sudo_cmd tar -xf "$tmpdir/helics.tar.gz" -C "${prefix}"
         # add to PATH on Windows
+        echo
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "${prefix}/bin" >> "${GITHUB_PATH}}"; fi
         echo "::set-output name=prefix::$(echo ${prefix})"
         popd

@@ -1,0 +1,14 @@
+name: Test HELICS Install Action
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    steps:
+      - uses: gmlc-tdc/helics-action/install@main
+      - name: Test running helics_broker
+        run: helics_broker --version

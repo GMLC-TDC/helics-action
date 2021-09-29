@@ -18,6 +18,8 @@ runs:
   steps:
     - id: gh-cli-auth
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       run: gh auth login
     - id: newest-matching-version
       shell: bash

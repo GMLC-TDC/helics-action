@@ -63,8 +63,8 @@ runs:
         tar -czf "$tmpdir/helics.tar.gz" *
         $sudo_cmd tar -xf "$tmpdir/helics.tar.gz" -C "${prefix}"
         # add to PATH on Windows
-        echo
-        if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "${prefix}/bin" >> $GITHUB_PATH; fi
+        echo "GITHUB_PATH = $GITHUB_PATH"
+        if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "PATH=${prefix}/bin:$PATH" >> $GITHUB_ENV; fi
         echo "::set-output name=prefix::$(echo ${prefix})"
         popd
         rm -rf "$tmpdir"

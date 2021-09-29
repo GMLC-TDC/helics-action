@@ -17,12 +17,15 @@ runs:
   using: "composite"
   steps:
     - id: newest-matching-version
-      if: inputs.version != 'nightly'
       shell: bash
       run: |
-        # list most recent 30 releases, ignore "Pre-release" lines, then get the most recent tag that matches
-        NEWEST_VERSION_MATCH=$(gh release list --repo GMLC-TDC/HELICS --limit 100 | grep -v "Pre-release" | cut -f3 | grep "${{ inputs.version }}" | head -n1)
-      echo "::set-output name=version::$(echo $NEWEST_VERSION_MATCH)"
+        # composite run step actions don't support if for the yaml, so do the conditional check here
+        if [[ "${{inputs.version}}" != "nightly" ]];
+        then
+          # list most recent 30 releases, ignore "Pre-release" lines, then get the most recent tag that matches
+          NEWEST_VERSION_MATCH=$(gh release list --repo GMLC-TDC/HELICS --limit 100 | grep -v "Pre-release" | cut -f3 | grep "${{ inputs.version }}" | head -n1)
+          echo "::set-output name=version::$(echo $NEWEST_VERSION_MATCH)"
+        fi
 
     - id: download-install-helics
       shell: bash

@@ -56,8 +56,8 @@ runs:
         # "Install" HELICS
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then mkdir -p "${prefix}"; fi
         cd "${INSTALLER_DIRNAME}"
-        zip -1 * helics.zip
-        unzip helics.zip "${prefix}"/
+        7z a -t7z helics.7z *
+        7z x helics.7z -o"${prefix}" -r
         # add to PATH on Windows
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "${prefix}/bin" >> "${GITHUB_PATH}}"; fi
         echo "::set-output name=prefix::$(echo ${prefix})"

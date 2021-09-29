@@ -52,7 +52,11 @@ runs:
         INSTALLER_ARCHIVE="${INSTALLER_DIRNAME}.${ext}"
         curl -O -L "https://github.com/GMLC-TDC/HELICS/releases/download/v${HELICS_VERSION:1}/${INSTALLER_ARCHIVE}"
         # Extract HELICS archive
-        7z x "${INSTALLER_ARCHIVE}"
+        case "$ext" in
+          "tar.gz") tar xf "${INSTALLER_ARCHIVE}";;
+          "zip") unzip "${INSTALLER_ARCHIVE}";;
+          *) exit 1
+        esac
         # "Install" HELICS
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then mkdir -p "${prefix}"; fi
         cd "${INSTALLER_DIRNAME}"

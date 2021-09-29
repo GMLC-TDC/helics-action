@@ -41,9 +41,9 @@ runs:
         pushd "$tmpdir"
         # Download HELICS release based on the platform
         case "$(uname -s)" in
-          Linux*) platname="Linux-x86_64" && ext="tar.gz" && prefix="/usr/local";;
-          Darwin*) platname="macOS-x86_64" && ext="zip" && prefix="/usr/local";;
-          MINGW*) platname="win64" && ext="zip" && prefix="C:/local/helics";;
+          Linux*) platname="Linux-x86_64" && ext="tar.gz" && prefix="/usr/local" && sudo_cmd=sudo;;
+          Darwin*) platname="macOS-x86_64" && ext="zip" && prefix="/usr/local" && sudo_cmd=sudo;;
+          MINGW*) platname="win64" && ext="zip" && prefix="C:/local/helics" && sudo_cmd="";;
           *) exit 1
         esac
         if [[ "${{inputs.prefix}}" != "" ]]; then prefix="${{inputs.prefix}}"; fi
@@ -61,7 +61,7 @@ runs:
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then mkdir -p "${prefix}"; fi
         cd "${INSTALLER_DIRNAME}"
         tar -czf "$tmpdir/helics.tar.gz" .
-        sudo tar -xf "$tmpdir/helics.tar.gz" -C "${prefix}"
+        $sudo_cmd tar -xf "$tmpdir/helics.tar.gz" -C "${prefix}"
         # add to PATH on Windows
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "${prefix}/bin" >> "${GITHUB_PATH}}"; fi
         echo "::set-output name=prefix::$(echo ${prefix})"

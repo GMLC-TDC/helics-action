@@ -37,36 +37,30 @@ runs:
     - id: download-install-helics
       shell: bash
       run: |
-        tmpdir=$(mktemp -d)
-        pushd "$tmpdir"
-        # Download HELICS release based on the platform
+        # Set the install prefix and platform specific sudo command
         case "$(uname -s)" in
-          Linux*) platname="Linux-x86_64" && ext="tar.gz" && prefix="/usr/local" && sudo_cmd=sudo;;
-          Darwin*) platname="macOS-x86_64" && ext="zip" && prefix="/usr/local" && sudo_cmd=sudo;;
-          MINGW*) platname="win64" && ext="zip" && prefix="${HOME}/AppData/Local/gmlc-tdc/helics" && sudo_cmd="";;
+          Linux*) INSTALL_PREFIX="/usr/local" && sudo_cmd=sudo;;
+          Darwin*) INSTALL_PREFIX="/usr/local" && sudo_cmd=sudo;;
+          MINGW*) INSTALL_PREFIX="${HOME}/AppData/Local/gmlc-tdc/helics" && sudo_cmd="";;
           *) exit 1
         esac
-        if [[ "${{inputs.prefix}}" != "" ]]; then prefix="${{inputs.prefix}}"; fi
+        if [[ "${{inputs.prefix}}" != "" ]]; then INSTALL_PREFIX="${{inputs.prefix}}"; fi
+        export INSTALL_PREFIX
+        export sudo_cmd
+
+        # Make sure the parent install prefix directory exists
+        if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then mkdir -p "$INSTALL_PREFIX"; fi
+
+        # Make the HELICS version to fetch accessible to later steps
         HELICS_VERSION="${{steps.newest-matching-version.outputs.version}}"
-        INSTALLER_DIRNAME="Helics-${HELICS_VERSION:1}-${platname}"
-        INSTALLER_ARCHIVE="${INSTALLER_DIRNAME}.${ext}"
-        curl -O -L "https://github.com/GMLC-TDC/HELICS/releases/download/v${HELICS_VERSION:1}/${INSTALLER_ARCHIVE}"
-        # Extract HELICS archive
-        case "$ext" in
-          "tar.gz") tar xf "${INSTALLER_ARCHIVE}";;
-          "zip") unzip "${INSTALLER_ARCHIVE}";;
-          *) exit 1
-        esac
-        # "Install" HELICS
-        if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then mkdir -p "${prefix}"; fi
-        cd "${INSTALLER_DIRNAME}"
-        tar -czf "$tmpdir/helics.tar.gz" *
-        $sudo_cmd tar -xf "$tmpdir/helics.tar.gz" -C "${prefix}"
+        export HELICS_VERSION
+        
+        # Install HELICS from binary archive
+        ${{github.action_path}}/install-helics-binary.sh
+
         # add to PATH on Windows
-        if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "${prefix}/bin" >> $GITHUB_PATH; fi
-        echo "::set-output name=prefix::$(echo ${prefix})"
-        popd
-        rm -rf "$tmpdir"
+        if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "$INSTALL_PREFIX/bin" >> $GITHUB_PATH; fi
+        echo "::set-output name=prefix::$(echo $INSTALL_PREFIX)"
 
     - id: gh-cli-logout
       shell: bash

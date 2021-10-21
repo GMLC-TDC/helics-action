@@ -5,6 +5,9 @@ inputs:
   version:
     description: 'HELICS version to install. Default is `v3`. Use `nightly` to install the latest successful nightly HELICS build.'
     default: 'v3'
+  build_from_source:
+    description: 'Install HELICS by building from a source archive. Slow (10-15 minutes). Default off, set to `true` to enable.'
+    default: ''
   prefix:
     description: 'Install prefix for HELICS. Default is /usr/local on Linux/macOS, and $HOME/AppData/Local/gmlc-tdc/helics on Windows'
   token:
@@ -55,11 +58,13 @@ runs:
         HELICS_VERSION="${{steps.newest-matching-version.outputs.version}}"
         export HELICS_VERSION
         
-        # Install HELICS from binary archive
-        #"${GITHUB_ACTION_PATH}"/install-helics-binary.sh
-
-        # Install HELICS from source archive
-        "${GITHUB_ACTION_PATH}"/install-helics-source.sh
+        # Install HELICS
+        echo "build_from_source=${{fromJSON(inputs.build_from_source)}}"
+        if [[ "${{fromJSON(inputs.build_from_source)}}" != "True" ]]; then 
+          "${GITHUB_ACTION_PATH}"/install-helics-binary.sh
+        else
+          #"${GITHUB_ACTION_PATH}"/install-helics-source.sh
+        fi
 
         # add to PATH on Windows
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "$INSTALL_PREFIX/bin" >> $GITHUB_PATH; fi

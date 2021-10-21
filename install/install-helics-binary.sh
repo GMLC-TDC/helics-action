@@ -4,7 +4,7 @@
 
 # Set up a temporary directory
 echo "Creating temporary directory"
-tmpdir=$(mktemp -d)
+tmpdir="$(mktemp -d)"
 pushd "$tmpdir"
 
 # Download HELICS release based on the platform

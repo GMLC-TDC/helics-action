@@ -35,13 +35,14 @@ export BOOST_ROOT
 
 # Build HELICS
 echo "Building HELICS"
-mkdir build && cd build
+mkdir build
+cd build || exit
 cmake .. -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Release -DHELICS_BUILD_CXX_SHARED_LIB=ON -DHELICS_BUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DHELICS_ZMQ_SUBPROJECT=ON
 cmake --build . --parallel
 
 # Install HELICS
 echo "Installing HELICS"
-$sudo_cmd cmake --build . --target install
+${sudo_cmd:-} cmake --build . --target install
 
 # Clean-up tmpdir
 echo "Cleaning-up temporary directory"

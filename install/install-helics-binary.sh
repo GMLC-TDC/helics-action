@@ -30,9 +30,9 @@ esac
 
 # "Install" HELICS
 echo "Installing HELICS to INSTALL_PREFIX"
-cd "${INSTALLER_DIRNAME}"
-tar -czf "$tmpdir/helics.tar.gz" *
-$sudo_cmd tar -xf "$tmpdir/helics.tar.gz" -C "$INSTALL_PREFIX"
+cd "${INSTALLER_DIRNAME}" || exit
+tar -czf "$tmpdir/helics.tar.gz" -- *
+${sudo_cmd:-} tar -xf "$tmpdir/helics.tar.gz" -C "$INSTALL_PREFIX"
 
 # Clean-up tmpdir
 echo "Cleaning-up temporary directory"

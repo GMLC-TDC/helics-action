@@ -56,7 +56,7 @@ runs:
         export HELICS_VERSION
         
         # Install HELICS from binary archive
-        ${{github.action_path}}/install-helics-binary.sh
+        "${GITHUB_ACTION_PATH}"/install-helics-binary.sh
 
         # add to PATH on Windows
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "$INSTALL_PREFIX/bin" >> $GITHUB_PATH; fi

@@ -23,7 +23,7 @@ on:
 
 jobs:
   install-binary-test:
-    if: (github.event.name == 'schedule') || (inputs.install_binary == 'true')
+    if: (github.event.name == 'schedule') || (github.event.name == 'push') || (inputs.install_binary == 'true')
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

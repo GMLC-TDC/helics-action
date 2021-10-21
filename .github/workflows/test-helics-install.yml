@@ -1,15 +1,50 @@
 name: Test HELICS Install Action
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/test-helics-install.yml'
+      - 'install/**'
+      - '!install/README.md'
+  schedule:
+    - cron: '15 10 * * 1,3,5' # Running early in the morning (UTC)
+  workflow_dispatch:
+    inputs:
+      install_binary:
+        description: 'Install HELICS from binary release'
+        required: false
+        default: 'true'
+      build_from_source:
+        description: 'Install HELICS by building from source (set to `true` to enable`; takes 10-15min)'
+        required: false
+        default: 'false'
 
 jobs:
-  test:
+  install-binary-test:
+    if: (github.event.name == 'schedule') || (inputs.install_binary == 'true')
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
     steps:
       - uses: gmlc-tdc/helics-action/install@main
+      - name: Test running helics_broker
+        shell: bash
+        run: |
+          helics_broker --version
+
+  install-source-test:
+    if: (github.event.name == 'schedule') || (inputs.build_from_source == 'true')
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    steps:
+      - uses: gmlc-tdc/helics-action/install@main
+        with:
+          build_from_source: 'true'
       - name: Test running helics_broker
         shell: bash
         run: |

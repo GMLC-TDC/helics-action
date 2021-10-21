@@ -5,9 +5,9 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/test-helics-install.yml'
+      - '.github/workflows/**'
       - 'install/**'
-      - '!install/README.md'
+      - '!install/**.md'
   schedule:
     - cron: '15 10 * * 1,3,5' # Running early in the morning (UTC)
   workflow_dispatch:

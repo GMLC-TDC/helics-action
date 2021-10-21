@@ -59,11 +59,10 @@ runs:
         export HELICS_VERSION
         
         # Install HELICS
-        echo "build_from_source=${{fromJSON(inputs.build_from_source)}}"
-        if [[ "${{fromJSON(inputs.build_from_source)}}" != "True" ]]; then 
+        if [[ "${{inputs.build_from_source}}" != "true" ]]; then 
           "${GITHUB_ACTION_PATH}"/install-helics-binary.sh
         else
-          #"${GITHUB_ACTION_PATH}"/install-helics-source.sh
+          "${GITHUB_ACTION_PATH}"/install-helics-source.sh
         fi
 
         # add to PATH on Windows

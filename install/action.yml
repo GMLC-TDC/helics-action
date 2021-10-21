@@ -37,6 +37,12 @@ runs:
           echo "::set-output name=version::$(echo $NEWEST_VERSION_MATCH)"
         fi
 
+    # Install ninja, in case a source build will be done (unfortunately, composite actions don't support conditions, but only takes 1-2s to run)
+    - uses: seanmiddleditch/gha-setup-ninja@856654e80dd21909aec244cd01bb96e5c841d64f
+      with:
+        destination: "${{ runner.temp }}/ninja-build"
+
+    # Install HELICS
     - id: download-install-helics
       shell: bash
       run: |
@@ -57,9 +63,9 @@ runs:
         # Make the HELICS version to fetch accessible to later steps
         HELICS_VERSION="${{steps.newest-matching-version.outputs.version}}"
         export HELICS_VERSION
-        
+
         # Install HELICS
-        if [[ "${{inputs.build_from_source}}" != "true" ]]; then 
+        if [[ "${{inputs.build_from_source}}" != "true" ]]; then
           "${GITHUB_ACTION_PATH}"/install-helics-binary.sh
         else
           "${GITHUB_ACTION_PATH}"/install-helics-source.sh
@@ -68,6 +74,10 @@ runs:
         # add to PATH on Windows
         if [[ "$(uname -s)" == MINGW* || "${{inputs.prefix}}" != "" ]]; then echo "$INSTALL_PREFIX/bin" >> $GITHUB_PATH; fi
         echo "::set-output name=prefix::$(echo $INSTALL_PREFIX)"
+
+    - id: remove-ninja-install
+      shell: bash
+      run: rm -rf "${{ runner.temp }}/ninja-build"
 
     - id: gh-cli-logout
       shell: bash

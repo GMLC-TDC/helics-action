@@ -7,6 +7,10 @@ echo "Creating temporary directory"
 tmpdir="$(mktemp -d)"
 pushd "$tmpdir"
 
+# Pick a CMake generator based on the platform
+CMAKE_GEN=""
+if [[ "$(uname -s)" != MINGW* ]]; then CMAKE_GEN="-GNinja"; fi
+
 # Download HELICS release source archive
 SOURCE_ARCHIVE="Helics-${HELICS_VERSION}-source.tar.gz"
 echo "Downloading HELICS source archive ($SOURCE_ARCHIVE)"
@@ -37,7 +41,7 @@ export BOOST_ROOT
 echo "Building HELICS"
 mkdir build
 cd build || exit
-cmake -GNinja -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Release -DHELICS_BUILD_CXX_SHARED_LIB=ON -DHELICS_BUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DHELICS_ZMQ_SUBPROJECT=ON ..
+cmake ${CMAKE_GEN} -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Release -DHELICS_BUILD_CXX_SHARED_LIB=ON -DHELICS_BUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DHELICS_ZMQ_SUBPROJECT=ON ..
 cmake --build . --parallel
 
 # Install HELICS

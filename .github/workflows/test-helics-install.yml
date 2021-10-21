@@ -23,7 +23,7 @@ on:
 
 jobs:
   install-binary-test:
-    if: (github.event.name == 'schedule') || (github.event.name == 'push') || (inputs.install_binary == 'true')
+    if: github.event.name == 'schedule' || github.event.name == 'push' || inputs.install_binary == 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -36,7 +36,7 @@ jobs:
           helics_broker --version
 
   install-source-test:
-    if: (github.event.name == 'schedule') || (inputs.build_from_source == 'true')
+    if: github.event.name == 'schedule' || inputs.build_from_source == 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

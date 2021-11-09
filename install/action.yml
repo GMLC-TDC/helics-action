@@ -27,7 +27,7 @@ runs:
       run: echo "${{inputs.token}}" | gh auth login --with-token
 
     - id: newest-matching-version
-      if: ${{ inputs.version != "nightly" }}
+      if: ${{ inputs.version != 3 }}
       shell: bash
       run: |
         # list most recent 100 releases, ignore "Pre-release" lines, then get the most recent tag that matches

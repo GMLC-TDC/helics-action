@@ -7,48 +7,53 @@ if [[ "${INPUT_MATLAB}" == "true" ]];
 then
     rm -rf interfaces/matlab/interface/*
     mkdir build_matlab
-    pushd build_matlab
+    pushd build_matlab || exit
+    # shellcheck disable=SC2086
     cmake -DHELICS_BUILD_MATLAB_INTERFACE=ON -DSWIG_EXECUTABLE=/root/swig-matlab/bin/swig ${COMMON_CMAKE_OPTIONS} ..
     make -j2 mfile_overwrite
-    popd
+    popd || exit
 fi
 
 if [[ "${INPUT_JAVA}" == "true" ]];
 then
     rm -rf interfaces/java/interface/*
     mkdir build_java_interface
-    pushd build_java_interface
+    pushd build_java_interface || exit
+    # shellcheck disable=SC2086
     cmake -DHELICS_BUILD_JAVA_INTERFACE=ON ${COMMON_CMAKE_OPTIONS} ..
     make -j2 javafile_overwrite
-    popd
+    popd || exit
 fi
 
 if [[ "${INPUT_PYTHON}" == "true" ]];
 then
     rm -rf interfaces/python/interface/* || true
     mkdir build_python_interface
-    pushd build_python_interface
+    pushd build_python_interface || exit
+    # shellcheck disable=SC2086
     cmake -DHELICS_BUILD_PYTHON_INTERFACE=ON ${COMMON_CMAKE_OPTIONS} ..
     make -j2 pythonfile_overwrite
-    popd
+    popd || exit
 fi
 
 if [[ "${INPUT_CSHARP}" == "true" ]];
 then
     rm -rf interfaces/csharp/interface/* || true
     mkdir build_csharp_interface
-    pushd build_csharp_interface
+    pushd build_csharp_interface || exit
+    # shellcheck disable=SC2086
     cmake -DHELICS_BUILD_CSHARP_INTERFACE=ON ${COMMON_CMAKE_OPTIONS} ..
     make -j2 csharpfile_overwrite
-    popd
+    popd || exit
 fi
 
 if [[ "${INPUT_OCTAVE}" == "true" ]];
 then
     rm -rf interfaces/octave/interface/* || true
     mkdir build_octave_interface
-    pushd build_octave_interface
+    pushd build_octave_interface || exit
+    # shellcheck disable=SC2086
     cmake -DHELICS_BUILD_OCTAVE_INTERFACE=ON ${COMMON_CMAKE_OPTIONS} ..
     make -j2 octavefile_overwrite
-    popd
+    popd || exit
 fi

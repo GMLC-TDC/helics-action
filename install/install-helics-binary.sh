@@ -5,7 +5,7 @@
 # Set up a temporary directory
 echo "Creating temporary directory"
 tmpdir="$(mktemp -d)"
-pushd "$tmpdir"
+pushd "$tmpdir" || exit
 
 # Download HELICS release based on the platform
 case "$(uname -s)" in
@@ -36,6 +36,6 @@ ${sudo_cmd:-} tar -xf "$tmpdir/helics.tar.gz" -C "$INSTALL_PREFIX"
 
 # Clean-up tmpdir
 echo "Cleaning-up temporary directory"
-popd
+popd || exit
 rm -rf "$tmpdir"
 

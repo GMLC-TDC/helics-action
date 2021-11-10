@@ -5,7 +5,7 @@
 # Set up a temporary directory
 echo "Creating temporary directory"
 tmpdir="$(mktemp -d)"
-pushd "$tmpdir"
+pushd "$tmpdir" || exit
 
 # Pick a CMake generator based on the platform
 CMAKE_GEN=""
@@ -50,6 +50,6 @@ ${sudo_cmd:-} cmake --build . --target install
 
 # Clean-up tmpdir
 echo "Cleaning-up temporary directory"
-popd
+popd || exit
 rm -rf "$tmpdir"
 

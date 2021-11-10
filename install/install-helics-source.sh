@@ -26,14 +26,14 @@ BOOST_VERSION="1.74.0"
 BOOST_ROOT="$PWD/boost-prefix"
 BOOST_URL="https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//./_}.tar.bz2/download"
 (
-  tmp_boost="$(mktemp -d)"
-  pushd "$tmp_boost"
-  curl --insecure --location --output "download.tar.bz2" "$BOOST_URL"
-  tar xfj "download.tar.bz2"
-  mkdir -p "$BOOST_ROOT"
-  cp -r boost_*/* "$BOOST_ROOT"
-  popd
-  rm -rf "$tmp_boost"
+	tmp_boost="$(mktemp -d)"
+	pushd "$tmp_boost"
+	curl --insecure --location --output "download.tar.bz2" "$BOOST_URL"
+	tar xfj "download.tar.bz2"
+	mkdir -p "$BOOST_ROOT"
+	cp -r boost_*/* "$BOOST_ROOT"
+	popd
+	rm -rf "$tmp_boost"
 ) || exit
 export BOOST_ROOT
 
@@ -52,4 +52,3 @@ ${sudo_cmd:-} cmake --build . --target install
 echo "Cleaning-up temporary directory"
 popd || exit
 rm -rf "$tmpdir"
-

@@ -3,18 +3,18 @@ description: "Runs a provided build script in the same environment used for rele
 
 inputs:
   script:
-    description: 'Script to run'
+    description: "Script to run"
     required: true
   arch:
-    description: 'CMake architecture'
+    description: "CMake architecture"
   cmake_gen:
-    description: 'CMake generator'
+    description: "CMake generator"
   msvc_ver:
-    description: 'MSVC version'
+    description: "MSVC version"
   macosx_target_ver:
-    description: 'macOS Deployment Target version'
+    description: "macOS Deployment Target version"
   cpack_gen:
-    description: 'CPack generator'
+    description: "CPack generator"
 
 runs:
   using: "composite"
@@ -29,7 +29,7 @@ runs:
         CPACK_GEN: ${{ inputs.cpack_gen }}
       shell: bash
       run: ${{ inputs.script }}
- 
+
     - name: Build containerized
       if: runner.os == 'Linux'
       uses: ./.github/actions/linux-release-builder

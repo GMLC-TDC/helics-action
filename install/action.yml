@@ -1,24 +1,24 @@
-name: 'Install HELICS'
-description: 'Installs HELICS from releases or a nightly build'
+name: "Install HELICS"
+description: "Installs HELICS from releases or a nightly build"
 
 inputs:
   version:
-    description: 'HELICS version to install. Default is `v3`. Use `nightly` to install the latest successful nightly HELICS build.'
-    default: 'v3'
+    description: "HELICS version to install. Default is `v3`. Use `nightly` to install the latest successful nightly HELICS build."
+    default: "v3"
   build_from_source:
-    description: 'Install HELICS by building from a source archive. Slow (10-15 minutes). Default off, set to `true` to enable.'
-    default: ''
+    description: "Install HELICS by building from a source archive. Slow (10-15 minutes). Default off, set to `true` to enable."
+    default: ""
   prefix:
-    description: 'Install prefix for HELICS. Default is /usr/local on Linux/macOS, and $HOME/AppData/Local/gmlc-tdc/helics on Windows'
+    description: "Install prefix for HELICS. Default is /usr/local on Linux/macOS, and $HOME/AppData/Local/gmlc-tdc/helics on Windows"
   token:
-    description: 'Personal access token (PAT) used to access the GitHub API for fetching release info. The post job step logs out of gh cli after.'
+    description: "Personal access token (PAT) used to access the GitHub API for fetching release info. The post job step logs out of gh cli after."
     default: ${{ github.token }}
 outputs:
   version:
-    description: 'Version of HELICS that was installed'
+    description: "Version of HELICS that was installed"
     value: ${{ steps.newest-matching-version.outputs.version }}
   prefix:
-    description: 'HELICS install prefix'
+    description: "HELICS install prefix"
 runs:
   using: "composite"
   steps:

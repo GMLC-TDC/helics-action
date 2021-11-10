@@ -6,6 +6,6 @@ updates:
       interval: "daily"
 
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "update-swig-interfaces/"
     schedule:
       interval: "daily"

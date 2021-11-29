@@ -13,13 +13,15 @@ on:
   workflow_dispatch:
     inputs:
       install_binary:
+        type: boolean
         description: "Install HELICS from binary release"
         required: false
-        default: "true"
+        default: true
       build_from_source:
+        type: boolean
         description: "Install HELICS by building from source (set to `true` to enable`; takes 10-15min)"
         required: false
-        default: "false"
+        default: false
 
 jobs:
   install-binary-test:

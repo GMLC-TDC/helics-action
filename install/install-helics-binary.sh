@@ -11,8 +11,9 @@ pushd "$tmpdir" || exit
 case "$(uname -s)" in
 Linux*) platname="Linux-x86_64" && ext="tar.gz" ;;
 Darwin*)
-  dpkg --compare-versions "${HELICS_VERSION:1}" "lt" "3.1.0" && platname="macOS-x86_64" || platname="macOS-universal2"
-  ext="zip" ;;
+	dpkg --compare-versions "${HELICS_VERSION:1}" "lt" "3.1.0" && platname="macOS-x86_64" || platname="macOS-universal2"
+	ext="zip"
+	;;
 MINGW*) platname="win64" && ext="zip" ;;
 *) exit 1 ;;
 esac

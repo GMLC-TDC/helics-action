@@ -17,14 +17,17 @@ runs:
   using: "composite"
   steps:
     - name: Install swig
+      shell: bash
       run: pip install swig
 
     - name: Set common CMake options
       id: set-common-options
+      shell: bash
       run: echo "COMMON_CMAKE_OPTIONS=-DHELICS_SWIG_GENERATE_INTERFACE_FILES_ONLY=ON -DHELICS_OVERWRITE_INTERFACE_FILES=ON -DHELICS_BUILD_EXAMPLES=OFF -DHELICS_ENABLE_ZMQ_CORE=OFF -DHELICS_BUILD_TESTS=OFF -DHELICS_BUILD_APP_EXECUTABLES=OFF -DHELICS_DISABLE_BOOST=ON -DHELICS_ENABLE_SWIG=ON" >> $GITHUB_ENV
 
     - name: Generate Java interface files
       if: inputs.java == 'true'
+      shell: bash
       run: |
         rm -rf interfaces/java/interface/*
         mkdir build_java_interface
@@ -35,6 +38,7 @@ runs:
 
     - name: Generate Python interface files
       if: inputs.python == 'true'
+      shell: bash
       run: |
         rm -rf interfaces/python/interface/* || true
         mkdir build_python_interface
@@ -45,6 +49,7 @@ runs:
 
     - name: Generate C# interface files
       if: inputs.csharp == 'true'
+      shell: bash
       run: |
         rm -rf interfaces/csharp/interface/* || true
         mkdir build_csharp_interface
@@ -55,6 +60,7 @@ runs:
 
     - name: Generate Octave interface files
       if: inputs.octave == 'true'
+      shell: bash
       run: |
         rm -rf interfaces/octave/interface/* || true
         mkdir build_octave_interface

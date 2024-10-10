@@ -22,7 +22,7 @@ tar xf "helics.tar.gz"
 
 # Install Boost
 echo "Installing Boost"
-BOOST_VERSION="1.74.0"
+BOOST_VERSION="1.82.0"
 BOOST_ROOT="$PWD/boost-prefix"
 BOOST_URL="https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//./_}.tar.bz2/download"
 (

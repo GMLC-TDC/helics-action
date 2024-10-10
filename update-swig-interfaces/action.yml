@@ -1,9 +1,6 @@
 name: "Update SWIG Interface Files"
 description: "Runs swig to generate updated interface files for the HELICS language bindings"
 inputs:
-  matlab:
-    description: "Generate Matlab interface files"
-    default: false
   java:
     description: "Generate Java interface files"
     default: true
@@ -17,5 +14,51 @@ inputs:
     description: "Generate Octave interface files (NOT SUPPORTED - DOES NOTHING)"
     default: false
 runs:
-  using: "docker"
-  image: "Dockerfile"
+  using: "composite"
+  steps:
+    - name: Install swig
+      run: pip install swig
+
+    - name: Set common CMake options
+      id: set-common-options
+      run: echo "COMMON_CMAKE_OPTIONS=-DHELICS_SWIG_GENERATE_INTERFACE_FILES_ONLY=ON -DHELICS_OVERWRITE_INTERFACE_FILES=ON -DHELICS_BUILD_EXAMPLES=OFF -DHELICS_ENABLE_ZMQ_CORE=OFF -DHELICS_BUILD_TESTS=OFF -DHELICS_BUILD_APP_EXECUTABLES=OFF -DHELICS_DISABLE_BOOST=ON -DHELICS_ENABLE_SWIG=ON" >> $GITHUB_ENV
+
+    - name: Generate Java interface files
+      if: inputs.java == 'true'
+      run: |
+        rm -rf interfaces/java/interface/*
+        mkdir build_java_interface
+        pushd build_java_interface || exit
+        cmake -DHELICS_BUILD_JAVA_INTERFACE=ON ${{ env.COMMON_CMAKE_OPTIONS }} ..
+        make -j2 javafile_overwrite
+        popd || exit
+
+    - name: Generate Python interface files
+      if: inputs.python == 'true'
+      run: |
+        rm -rf interfaces/python/interface/* || true
+        mkdir build_python_interface
+        pushd build_python_interface || exit
+        cmake -DHELICS_BUILD_PYTHON_INTERFACE=ON ${{ env.COMMON_CMAKE_OPTIONS }} ..
+        make -j2 pythonfile_overwrite
+        popd || exit
+
+    - name: Generate C# interface files
+      if: inputs.csharp == 'true'
+      run: |
+        rm -rf interfaces/csharp/interface/* || true
+        mkdir build_csharp_interface
+        pushd build_csharp_interface || exit
+        cmake -DHELICS_BUILD_CSHARP_INTERFACE=ON ${{ env.COMMON_CMAKE_OPTIONS }} ..
+        make -j2 csharpfile_overwrite
+        popd || exit
+
+    - name: Generate Octave interface files
+      if: inputs.octave == 'true'
+      run: |
+        rm -rf interfaces/octave/interface/* || true
+        mkdir build_octave_interface
+        pushd build_octave_interface || exit
+        cmake -DHELICS_BUILD_OCTAVE_INTERFACE=ON ${{ env.COMMON_CMAKE_OPTIONS }} ..
+        make -j2 octavefile_overwrite
+        popd || exit
